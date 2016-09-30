@@ -3,10 +3,12 @@ package main;
 public class BCP {
 	private String nome; //nome do programa
 	private String [] texto; //código do programa
-	private char estado; //estado do processo: 'E' = Executando   'P' = Pronto   'B' = Bloqueado						
+	private char estado; //estado do processo: 'E' = Executando   'P' = Pronto   'B' = Bloqueado	
 	private int pc; //Program Counter
+	private int espera; //contador de espera para quando o processo for bloqueado
 	private int s1; //estado atual do registrador 1
 	private int s2; //estado atual do registrador 2
+	int trocas; //para fins estatisticos
 	
 	public BCP(String nome){
 		this.nome = nome;
@@ -15,15 +17,42 @@ public class BCP {
 		this.s1 = 0;
 		this.s2 = 0;
 		this.pc = 0;
+		this.espera = 0;
+		this.trocas = 0;
 	}
-
+	
+	public void executar(){
+		trocas++;
+		this.estado = 'E';
+	}
+	
+	public void bloquear(){
+		this.espera = 2;
+		this.estado = 'B';
+	}
+	
+	//metodo usado para verificar processos bloqueados 
+	public boolean estaPronto(){
+		this.espera--;
+		if (espera == 0){
+			this.estado = 'P';
+			return true;
+		}
+		return false;
+	}
+	
+	//retorna a proxima instrucao a ser executada
+	public String proxInstrucao(){
+		this.pc++;
+		return texto[pc-1];
+	}
+	
+	public double calculaMediaInstrucoes(){
+		return (pc-1)/trocas;
+	}
+	
 	public String getNome() {
 		return nome;
-	}
-
-	public String getInstrucao(int index) {
-		if (index < 21) return texto[index];
-		return "";
 	}
 
 	public void setInstrucao(int index, String texto) {
@@ -36,10 +65,6 @@ public class BCP {
 
 	public void setEstado(char estado) {
 		if (estado == 'P' || estado == 'B' || estado == 'E') this.estado = estado;
-	}
-
-	public int getPc() {
-		return pc;
 	}
 
 	public int getS1() {
@@ -58,4 +83,7 @@ public class BCP {
 		this.s2 = s2;
 	}
 	
+	public int getTrocas() {
+		return trocas;
+	}
 }

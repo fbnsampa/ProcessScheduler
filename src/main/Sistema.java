@@ -11,7 +11,7 @@ public class Sistema {
 	
 	
 	public static void carregaProcessos(){
-		String diretorio = "C:/Users/Fabiano/Dropbox/Estudo/SO/EP1/processos/";
+		String diretorio = "D:/Dropbox/Estudo/SO/EP1/processos/";
 		String nomeArquivo = "quantum.txt";
 		Path endereco = Paths.get(diretorio, nomeArquivo);
 		
@@ -34,6 +34,7 @@ public class Sistema {
 			    BufferedReader arquivo = new BufferedReader(new InputStreamReader(in))) {
 				String linha = arquivo.readLine();
 				BCP processo = new BCP(linha);
+				System.out.println("Carregando " + processo.getNome());
 				int j = 0;
 				while (!linha.equals("SAIDA")){
 					linha = arquivo.readLine();
@@ -49,12 +50,32 @@ public class Sistema {
 		}
 	}
 	
+	//remove um processo da tabela
+	public static void removeProcesso(BCP processo){
+		for (int i = 0; i < tabela.length; i++){
+			if (tabela[i] == processo){
+				tabela[i] = null;
+				break;
+			}
+		}
+	}
+	
+	//Verifica se ha processos na tabela
+	public static boolean haProcessos(){
+		for (int i = 0; i < tabela.length; i++){
+			if (tabela[i] != null) return true;
+		}
+		return false;
+	}
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		tabela = new BCP[10];
 		escalonador = new Escalonador();
+
 		carregaProcessos();
+		escalonador.executar();
+		
 	}
 
 }
