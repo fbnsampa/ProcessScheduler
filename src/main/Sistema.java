@@ -1,17 +1,21 @@
 package main;
 import java.io.*;
 import java.nio.file.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Sistema {
 	static BCP [] tabela; //tabela de processos
 	static Escalonador escalonador;
 	static int quantum; 
 	static int r1; //registardor 1
-	static int r2; //registrador 2
+	static int r2; //registrador 2	
+	static File log;
 	
 	
+	//carrega os processos da pasta processos
 	public static void carregaProcessos(){
-		String diretorio = "D:/Dropbox/Estudo/SO/EP1/processos/";
+		String diretorio = "processos/";
 		String nomeArquivo = "quantum.txt";
 		Path endereco = Paths.get(diretorio, nomeArquivo);
 		
@@ -34,7 +38,10 @@ public class Sistema {
 			    BufferedReader arquivo = new BufferedReader(new InputStreamReader(in))) {
 				String linha = arquivo.readLine();
 				BCP processo = new BCP(linha);
-				System.out.println("Carregando " + processo.getNome());
+				//System.out.println("Carregando " + processo.getNome());
+				//Adiciona linha  no buffer de dados
+				escalonador.setListaLog("Carregando " + processo.getNome());
+				
 				int j = 0;
 				while (!linha.equals("SAIDA")){
 					linha = arquivo.readLine();
@@ -49,6 +56,33 @@ public class Sistema {
 			}			
 		}
 	}
+	
+	//cria o arquivo do log
+	public static void criaArquivo(){
+		try{
+			log =  new File("processos/log"+ String.format("%02d", quantum) +".txt");
+			
+			if(!log.exists())
+				log.createNewFile();
+			
+			if (log == null){
+				System.out.println("\n escrever arquivo: erro no log \n" + log.toString());
+				return;
+			} 
+			FileWriter fw = new FileWriter (log);
+			BufferedWriter bw = new BufferedWriter(fw);
+			
+			for (String miniLinha : escalonador.getListaLog()) 
+			    bw.write(miniLinha + "\n");
+						
+			bw.close();
+			
+		} catch (IOException e){
+			e.printStackTrace();
+		}
+		
+	}
+
 	
 	//remove um processo da tabela
 	public static void removeProcesso(BCP processo){
@@ -75,6 +109,8 @@ public class Sistema {
 
 		carregaProcessos();
 		escalonador.executar();
+		
+		criaArquivo();
 		
 	}
 

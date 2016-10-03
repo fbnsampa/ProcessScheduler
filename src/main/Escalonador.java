@@ -1,11 +1,14 @@
 package main;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 class Escalonador {
 	private BCP executando;
 	private LinkedList <BCP> prontos;
 	private LinkedList <BCP> bloqueados;
 	double mediaTrocas, mediaInstrucoes; //para fins estatisticos
+	private List<String> listaLog = new ArrayList<String>();
 	
 	public Escalonador(){
 		this.prontos = new LinkedList<BCP>();
@@ -13,6 +16,10 @@ class Escalonador {
 		mediaInstrucoes = 0;
 		mediaTrocas = 0;
 	}
+	
+	public List<String> getListaLog() { return listaLog; }
+	
+	public void setListaLog(String listaLog) { this.listaLog.add(listaLog); }
 
 	public void addProcesso(BCP processo){
 		this.prontos.add(processo);
@@ -37,7 +44,9 @@ class Escalonador {
 			//O primeiro processo da fila recebe o estado "Executando"
 			executando = prontos.poll();
 			executando.executar();
-			System.out.println("Executando " + executando.getNome());
+			//System.out.println("Executando " + executando.getNome());
+			//Add linha no buffer
+			this.setListaLog("Executando " + executando.getNome());
 			
 			//Carrega o contexto
 			Sistema.r1 = executando.getS1();
@@ -55,7 +64,10 @@ class Escalonador {
 					case 'E': //E/S
 						executando.bloquear();
 						bloqueados.add(executando);
-						System.out.println("E/S iniciada em " + executando.getNome());
+						//System.out.println("E/S iniciada em " + executando.getNome());
+						//Add linha no buffer
+						this.setListaLog("E/S iniciada em " + executando.getNome());
+						
 						clock = 0; //interrompendo o laço
 						break;
 					case 'S': //SAIDA
@@ -63,7 +75,10 @@ class Escalonador {
 						executando.setEstado('B'); //apenas para evitar que volte para a fila de prontos
 						mediaTrocas += executando.getTrocas();
 						mediaInstrucoes += executando.calculaMediaInstrucoes();
-						System.out.println(executando.getNome() + " terminado. X=" + Sistema.r1 + ". Y=" + Sistema.r2);
+						//System.out.println(executando.getNome() + " terminado. X=" + Sistema.r1 + ". Y=" + Sistema.r2);
+						//Add linha buffer
+						this.setListaLog(executando.getNome() + " terminado. X=" + Sistema.r1 + ". Y=" + Sistema.r2);
+						
 						clock = 0; //interrompendo o laço
 						break;
 					case 'X': //X= 
@@ -79,10 +94,14 @@ class Escalonador {
 				}
 			}
 			
-			if (numInstrucoes == 1)
-				System.out.println("Interrompendo " + executando.getNome() + " após 1 instrução");
-			else
-				System.out.println("Interrompendo " + executando.getNome() + " após " + numInstrucoes + " instruções");
+			//Add linha no buffer
+			if (numInstrucoes == 1){
+				//System.out.println("Interrompendo " + executando.getNome() + " após 1 instrução");
+				this.setListaLog("Interrompendo " + executando.getNome() + " após 1 instrução");
+			} else {
+				//System.out.println("Interrompendo " + executando.getNome() + " após " + numInstrucoes + " instruções");
+				this.setListaLog("Interrompendo " + executando.getNome() + " após " + numInstrucoes + " instruções");
+			}
 			
 			//Armazena o contexto
 			executando.setS1(Sistema.r1);
@@ -98,9 +117,14 @@ class Escalonador {
 		mediaTrocas /= 10;
 		mediaInstrucoes /= 10;
 		
-		System.out.println("MEDIA DE TROCAS: " + mediaTrocas);
-		System.out.println("MEDIA DE INSTRUCOES: " + mediaInstrucoes);
-		System.out.println("QUANTUM: " + Sistema.quantum);
+		//Add linhan no buffer
+		this.setListaLog("MEDIA DE TROCAS: " + mediaTrocas);
+		this.setListaLog("MEDIA DE INSTRUCOES: " + mediaInstrucoes);
+		this.setListaLog("QUANTUM: " + Sistema.quantum);
+		
+		//System.out.println("MEDIA DE TROCAS: " + mediaTrocas);
+		//System.out.println("MEDIA DE INSTRUCOES: " + mediaInstrucoes);
+		//System.out.println("QUANTUM: " + Sistema.quantum);
 	}
 	
 }
