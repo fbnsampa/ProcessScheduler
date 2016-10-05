@@ -44,7 +44,6 @@ class Escalonador {
 			//O primeiro processo da fila recebe o estado "Executando"
 			executando = prontos.poll();
 			executando.executar();
-			//System.out.println("Executando " + executando.getNome());
 			//Add linha no buffer
 			this.setListaLog("Executando " + executando.getNome());
 			
@@ -64,7 +63,7 @@ class Escalonador {
 					case 'E': //E/S
 						executando.bloquear();
 						bloqueados.add(executando);
-						//System.out.println("E/S iniciada em " + executando.getNome());
+
 						//Add linha no buffer
 						this.setListaLog("E/S iniciada em " + executando.getNome());
 						
@@ -75,7 +74,7 @@ class Escalonador {
 						executando.setEstado('B'); //apenas para evitar que volte para a fila de prontos
 						mediaTrocas += executando.getTrocas();
 						mediaInstrucoes += executando.calculaMediaInstrucoes();
-						//System.out.println(executando.getNome() + " terminado. X=" + Sistema.r1 + ". Y=" + Sistema.r2);
+
 						//Add linha buffer
 						this.setListaLog(executando.getNome() + " terminado. X=" + Sistema.r1 + ". Y=" + Sistema.r2);
 						
@@ -96,10 +95,8 @@ class Escalonador {
 			
 			//Add linha no buffer
 			if (numInstrucoes == 1){
-				//System.out.println("Interrompendo " + executando.getNome() + " após 1 instrução");
 				this.setListaLog("Interrompendo " + executando.getNome() + " após 1 instrução");
 			} else {
-				//System.out.println("Interrompendo " + executando.getNome() + " após " + numInstrucoes + " instruções");
 				this.setListaLog("Interrompendo " + executando.getNome() + " após " + numInstrucoes + " instruções");
 			}
 			
@@ -121,10 +118,12 @@ class Escalonador {
 		this.setListaLog("MEDIA DE TROCAS: " + mediaTrocas);
 		this.setListaLog("MEDIA DE INSTRUCOES: " + mediaInstrucoes);
 		this.setListaLog("QUANTUM: " + Sistema.quantum);
-		
-		//System.out.println("MEDIA DE TROCAS: " + mediaTrocas);
-		//System.out.println("MEDIA DE INSTRUCOES: " + mediaInstrucoes);
-		//System.out.println("QUANTUM: " + Sistema.quantum);
+	}
+	
+	public static void main (String [] args){
+		//A principio o metodo main ficava na classe Sistema
+		//Mas para atender as exigencias do enunciado, foi colocado na classe Escalonador
+		Sistema.iniciar();
 	}
 	
 }

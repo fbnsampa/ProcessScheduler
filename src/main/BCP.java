@@ -1,6 +1,6 @@
 package main;
 
-public class BCP {
+class BCP {
 	private String nome; //nome do programa
 	private String [] texto; //código do programa
 	private char estado; //estado do processo: 'E' = Executando   'P' = Pronto   'B' = Bloqueado	
@@ -44,11 +44,11 @@ public class BCP {
 	//retorna a proxima instrucao a ser executada
 	public String proxInstrucao(){
 		this.pc++;
-		return texto[pc-1];
+		return texto[pc];
 	}
 	
 	public double calculaMediaInstrucoes(){
-		return (pc-1)/trocas;
+		return (pc)/trocas;
 	}
 	
 	public String getNome() {

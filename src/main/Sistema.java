@@ -1,17 +1,14 @@
 package main;
 import java.io.*;
 import java.nio.file.*;
-import java.util.ArrayList;
-import java.util.List;
 
-public class Sistema {
+class Sistema {
 	static BCP [] tabela; //tabela de processos
 	static Escalonador escalonador;
 	static int quantum; 
 	static int r1; //registardor 1
 	static int r2; //registrador 2	
 	static File log;
-	
 	
 	//carrega os processos da pasta processos
 	public static void carregaProcessos(){
@@ -38,7 +35,7 @@ public class Sistema {
 			    BufferedReader arquivo = new BufferedReader(new InputStreamReader(in))) {
 				String linha = arquivo.readLine();
 				BCP processo = new BCP(linha);
-				//System.out.println("Carregando " + processo.getNome());
+			
 				//Adiciona linha  no buffer de dados
 				escalonador.setListaLog("Carregando " + processo.getNome());
 				
@@ -82,7 +79,6 @@ public class Sistema {
 		}
 		
 	}
-
 	
 	//remove um processo da tabela
 	public static void removeProcesso(BCP processo){
@@ -102,16 +98,12 @@ public class Sistema {
 		return false;
 	}
 	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+	public static void iniciar() {
 		tabela = new BCP[10];
 		escalonador = new Escalonador();
-
 		carregaProcessos();
 		escalonador.executar();
-		
 		criaArquivo();
-		
 	}
 
 }
