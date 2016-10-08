@@ -3,7 +3,7 @@ import java.io.*;
 import java.nio.file.*;
 
 class Sistema {
-	static BCP [] tabela; //tabela de processos
+	static BCP [] tabela; //tabela de processos.
 	static Escalonador escalonador;
 	static int quantum; 
 	static int r1; //registardor 1

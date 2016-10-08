@@ -121,7 +121,7 @@ class Escalonador {
 	}
 	
 	public static void main (String [] args){
-		//A principio o metodo main ficava na classe Sistema
+		//A principio o metodo main ficava na classe Sistema.
 		//Mas para atender as exigencias do enunciado, foi colocado na classe Escalonador
 		Sistema.iniciar();
 	}

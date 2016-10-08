@@ -1,7 +1,7 @@
 package main;
 
 class BCP {
-	private String nome; //nome do programa
+	private String nome; //nome do programa.
 	private String [] texto; //código do programa
 	private char estado; //estado do processo: 'E' = Executando   'P' = Pronto   'B' = Bloqueado	
 	private int pc; //Program Counter
